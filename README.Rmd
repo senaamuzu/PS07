@@ -1,30 +1,70 @@
 ---
-title: "Untitled"
+title: "SDS 192-01 PS07: Titantic Regraphing"
+author: "Sena Amuzu"
+date: "12/01/2021"
 output: github_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set( echo = TRUE)
+
+library(ggplot2)
+library(dplyr) 
+library(fivethirtyeight)
+# For reading CSV spreadsheet files: 
+library(readr)
+
 ```
 
-## GitHub Documents
+# Regraphing Example: Number of Individuals in each Class on the Titanic
 
-This is an R Markdown format used for publishing markdown documents to GitHub. When you click the **Knit** button all R code chunks are run and a markdown file (.md) suitable for publishing to GitHub is generated.
+The **titanic dataset** from the internet contains demographic information about the 2201 passenengers on the Titanic disaster. *Note there are 2201 rows in this data, one for each passenger.* The information provided includes...
 
-## Including Code
+- passenger_number
+- Class (1st, 2nd, 3rd, Crew)
+- Sex (Female, Male)
+- Age (Adult, Child)
+- Survived (No, Yes)
+ 
 
-You can include R code in the document as follows:
-
-```{r cars}
-summary(cars)
+```{r, echo=FALSE}
+titanic <- read_csv("https://rudeboybert.github.io/SDS192/static/PS/titanic.csv")
 ```
 
-## Including Plots
+## a) Number of Titanic Passengers in each Class 
 
-You can also embed plots, for example:
+**Dplyr commands** are used to output a table that displays the counts of each Class. 
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+titanic_classification <- titanic %>% 
+  group_by(Class) %>% 
+  summarize(Total = sum(n()))
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+### Graph of Number of Titanic Passengers in each Class
+```{r}
+ggplot(titanic_classification, aes(x = Class, y = Total)) +
+  geom_bar(stat="identity", fill ="steelblue") + 
+  ggtitle("Number of Titanic Passengers in each Class", subtitle = "Not Distinguished by Gender") + 
+  labs(x = "Passenger Class", y = "Total Passengers")
+```
+
+## b) Number of Titanic Passengers in each Class Split by Sex
+
+**Dplyr commands** are used output a table that displays the counts of each Class. *split by sex* 
+
+```{r}
+titanic_classification_gender <- titanic %>% 
+  group_by(Sex,Class) %>% 
+  summarize(Total = sum(n()))
+```
+
+### Graph of Number of Titanic Passengers in each Class, Split by Sex
+```{r}
+ggplot(titanic_classification_gender, aes(x = Class, y = Total, fill = Sex)) +
+  geom_bar(stat="identity") + 
+  ggtitle("Number of Titanic Passengers in each Class", subtitle = "Distinguished by Gender") + 
+  labs(x = "Passenger Class", y = "Total Passengers")
+```
+
+ *In every class males out numbered female, especially in the Crew category. I assume this is due to most of the crew jobs being laborious.*  
