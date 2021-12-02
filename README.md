@@ -75,6 +75,6 @@ ggplot(titanic_classification_gender, aes(x = Class, y = Total, fill = Sex)) +
 
 ![](README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
-*In every class males out numbered female, especially in the Crew
+*In every class males out numbered females, especially in the Crew
 category. I assume this is due to most of the crew jobs being
 laborious.*
